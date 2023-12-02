@@ -21,7 +21,13 @@
 #include "Agents/AStarAgent.hpp"
 #include "core/Entity.hpp"
 
+void KillThread(size_t id, netWorth::ServerManager & serverManager){
+    serverManager.JoinClient(id);
 
+    std::cout << "Joined the thread back" << std::endl;
+
+    std::cout << serverManager.interfacesPresent;
+}
 
 void ClientThread(netWorth::ServerInterface & interface, cse491::WorldBase &world,
                   netWorth::ServerManager & serverManager){
@@ -29,18 +35,22 @@ void ClientThread(netWorth::ServerInterface & interface, cse491::WorldBase &worl
 
     std::cout << "In client thread" << std::endl;
 
+    size_t id = interface.GetID();
+
     std::cout << interface.GetName() << std::endl;
 
     //While this client is still connected (need to fix)
     while (serverManager.ActionMapContains(interface.GetID())){
 //        std::cout << interface.GetName() << " is connected" << std::endl;
     }
-    serverManager.JoinClient(interface.GetID());
 
-    std::cout << "Joined the thread back" << std::endl;
+    std::thread killThread(KillThread, id, std::ref(serverManager));
 
-    std::cout << serverManager.interfacesPresent;
+    world.RemoveAgent(id);
 
+    std::this_thread::sleep_for(std::chrono::milliseconds (500));
+
+    killThread.join();
 }
 
 /**
