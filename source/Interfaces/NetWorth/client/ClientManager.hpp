@@ -13,7 +13,7 @@ namespace netWorth{
     using namespace sf;
 
     /**
-     * The server that will be running and that allows clients to connect to
+     * Class that manages the active client
      */
     class ClientManager {
     private:
@@ -113,11 +113,18 @@ namespace netWorth{
             return "";
         }
 
-
+		/**
+		 * Sets the id of the client
+		 * @param id id to set
+		 */
         void setClientID(size_t id) {
             m_client_id = id;
         }
 
+		/**
+		 * Gets the id of the active client
+		 * @return size_t representing the id of the active client
+		 */
         size_t getClientID() const{
             return m_client_id;
         }
