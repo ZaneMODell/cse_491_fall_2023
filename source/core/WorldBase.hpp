@@ -304,18 +304,18 @@ public:
   /// @brief RunAgents, but with extra features for client-side
   /// @note Override this function if you want to control which grid the agents receive.
   virtual void RunClientAgents() {
-    for (auto & [id, agent_ptr] : agent_map) {
-      size_t action_id = agent_ptr->SelectAction(main_grid, type_options, item_map, agent_map);
-      agent_ptr->storeActionMap(agent_ptr->GetName());
-      int result = DoAction(*agent_ptr, action_id);
-      agent_ptr->SetActionResult(result);
-    }
-
     // Deserialize agents
     std::string data = client_manager->getSerializedAgents();
     if (data.substr(0, 18) == ":::START agent_set") {
       std::istringstream is(data);
       DeserializeAgentSet(is, client_manager);
+    }
+
+    for (auto & [id, agent_ptr] : agent_map) {
+      size_t action_id = agent_ptr->SelectAction(main_grid, type_options, item_map, agent_map);
+      agent_ptr->storeActionMap(agent_ptr->GetName());
+      int result = DoAction(*agent_ptr, action_id);
+      agent_ptr->SetActionResult(result);
     }
   }
 
