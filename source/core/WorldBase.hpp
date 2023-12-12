@@ -552,7 +552,7 @@ public:
 
     // client id NOT in agent map yet if ID = 0
     // append to end of set
-    if (client_id == 0) client_id = size;
+    if (client_id == 0) client_id = size + 1;
 
     // read each agent (only deserialize name, id, x, y for now)
     for (size_t i = 0; i < size; i++) {

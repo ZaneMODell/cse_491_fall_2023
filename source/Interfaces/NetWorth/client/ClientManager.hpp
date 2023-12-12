@@ -23,6 +23,7 @@ namespace netWorth{
 		unsigned short m_update_port = 0; ///Port to update the game
         std::unordered_map<size_t, size_t> m_action_map;     ///Map of agent IDs to most recent action selected
         size_t m_client_id = 0;		///Id of client
+        bool temp = true;
     protected:
 
     public:
@@ -106,6 +107,10 @@ namespace netWorth{
             std::optional<sf::IpAddress> tempIP;
             unsigned short tempPort;
             if (m_game_update_socket->receive(recvPkt, tempIP, tempPort) == sf::Socket::Status::Done) {
+                if (temp) {
+                    temp = false;
+                    return "";
+                }
                 std::string data;
                 recvPkt >> data;
                 return data;
